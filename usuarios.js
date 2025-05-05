@@ -5,3 +5,5 @@ let usuarios = [
     { id: 4, nombre: 'Dhalsim', edad: 45, lugarProcedencia: 'India' },
     { id: 5, nombre: 'Blanka', edad: 32, lugarProcedencia: 'Brasil' },
 ];
+
+module.exports = usuarios;
