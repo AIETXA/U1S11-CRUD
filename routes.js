@@ -22,12 +22,12 @@ router.get('/', (req, res) => {
     </form>
     <a href="/usuarios">Usuarios json</a>
     `);
-  });
+});
 
 
   router.get('/usuarios', (req, res) => {
     res.json(usuarios);
-  });
+});
 
   router.post('/usuarios', (req, res) => {
     const nuevoUsuario = {
@@ -38,7 +38,7 @@ router.get('/', (req, res) => {
     };
     usuarios.push(nuevoUsuario);
     res.redirect('/');
-  });
+});
   
   router.get('/usuarios/:id', (req, res) => {
     const id = parseInt(req.params.id);
@@ -48,20 +48,27 @@ router.get('/', (req, res) => {
     } else {
         res.status(404).send('Usuario no encontrado');
     }
-    
-    res.send(`Usuario con :${usuario}`);
-  })
+})
 
-  /*router.put('/usuarios/:nombre', (req, res) => {
+router.put('/usuarios/:nombre', (req, res) => {
     const nombre = req.params.nombre;
-    const { edad, lugarProcedencia } = req.body;
-    const usuario = usuarios.find(u => u.nombre === nombre);
-if(usuario) {
-    usuario.edad = edad || usuario.edad;
-    res.status(200).json(usuario);
+    const usuarioIndex = usuarios.findIndex(u => u.nombre === nombre);
+
+if(usuarioIndex === -1) {
+     usuarios[usuarioIndex].edad = req.body.edad
+     usuarios[usuarioIndex].lugarProcedencia = req.body.lugarProcedencia
+     res.json(usuarios[usuarioIndex])
+   
 } else {
     res.status(404).send('Usuario  no encontrado');
 }
-  });*/
+});
+
+router.delete('/:nombre', (req, res) => {
+  const nombre = req.params.nombre 
+  usuarios = usuarios.filter(u => u.nombre !== nombre)
+  res.json({mensaje: "Usuario eliminado"})
+})
+
 
   module.exports = router;

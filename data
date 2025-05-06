@@ -1,0 +1,51 @@
+const express = require('express')
+const route = express.Router()
+const usuarios = require('../data/usuarios.js')
+
+
+route.get('/', (req, res) => {
+  res.json(usuarios)
+})
+
+route.get('/:nombre', (req, res) => {
+  const nombre = req.params.nombre
+  console.log(req.params)
+  const usuario = usuarios.find(u => u.nombre.toLowerCase() === nombre.toLowerCase())
+  
+  if(!usuario) {
+    res.status(404).json({mensaje: 'usuario no encontrado'})
+  } else {
+    res.json(usuario)
+  }
+})
+
+route.post('/', (req, res) => {
+  const nuevoUsuario = {
+    id: usuarios.length + 1,
+    ...req.body
+  }
+  usuarios.push(nuevoUsuario)
+  res.redirect('/usuarios')
+})
+
+route.put('/:nombre', (req, res) => {
+  const nombre = req.params.nombre
+  const usuarioIndex = usuarios.findIndex(u => u.nombre === nombre)
+  
+  // Si no existe el usuario nos da una posición -1
+  if(usuarioIndex === -1) {
+    res.status(404).json({mensaje: 'usuario no encontrado'})
+  } else {
+    usuarios[usuarioIndex].edad = req.body.edad
+    usuarios[usuarioIndex].lugarProcedencia = req.body.lugarProcedencia
+    res.json(usuarios[usuarioIndex])
+  }
+})
+
+route.delete('/:nombre', (req, res) => {
+  const nombre = req.params.nombre 
+  usuarios = usuarios.filter(u => u.nombre !== nombre)
+  res.json({mensaje: "Usuario eliminado"})
+})
+
+module.exports = route 
